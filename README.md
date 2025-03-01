@@ -78,6 +78,8 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 
 
 ## Additional Documentation
+- [unstorage](https://unstorage.unjs.io/guide) - simple kv storage for multiple vendors
+- [vueuse](https://vueuse.org/guide/#nuxt) - Handy vue composables
 - [zod](https://zod.dev/) - available globally as `_z`
 - [lodash-es](https://lodash.com/) - Export functions you want from `/shared/utils/lodash.ts`
 - [Vuetify Nuxt Module](https://nuxt.vuetifyjs.com/)

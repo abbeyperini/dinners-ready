@@ -7,5 +7,5 @@ export default defineNuxtConfig({
     compatibilityVersion: 4
   },
 
-  modules: ['vuetify-nuxt-module']
+  modules: ['vuetify-nuxt-module', '@vueuse/nuxt']
 })

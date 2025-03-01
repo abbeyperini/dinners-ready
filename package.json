@@ -10,11 +10,13 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "zod": "^3.24.2",
+    "@vueuse/nuxt": "^12.7.0",
     "lodash-es": "^4.17.21",
     "nuxt": "^3.15.4",
+    "unstorage": "^1.15.0",
     "vue": "latest",
-    "vuetify-nuxt-module": "^0.18.3"
+    "vuetify-nuxt-module": "^0.18.3",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12"
