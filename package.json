@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test": "vitest"
   },
   "dependencies": {
     "@vueuse/nuxt": "^12.7.0",
@@ -19,6 +20,12 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.12"
+    "@nuxt/test-utils": "^3.17.1",
+    "@playwright/test": "^1.50.1",
+    "@types/lodash-es": "^4.17.12",
+    "@vue/test-utils": "^2.4.6",
+    "happy-dom": "^17.1.8",
+    "playwright-core": "^1.50.1",
+    "vitest": "^3.0.7"
   }
 }
