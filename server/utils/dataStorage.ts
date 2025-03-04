@@ -9,8 +9,13 @@ export async function saveWebhook(data: SavedWebhook){
   return await storage.setItem(data._id, data);
 }
 
+export async function getWebhook(webhookId: string):Promise<SavedWebhook|null>{
+  const storage = useWebhookStorage();
+  return await storage.getItem(webhookId);
+}
+
 export type SavedWebhookWithTriggers = SavedWebhook & {
-  triggers: string[];
+  triggers: (ListedTrigger|null)[];
 }
 
 export async function listWebhooks(): Promise<SavedWebhookWithTriggers[]>{
@@ -25,6 +30,8 @@ export async function listWebhooks(): Promise<SavedWebhookWithTriggers[]>{
 }
 
 
+
+
 export function useTriggerStorage(){
   return useStorage<SavedTrigger>("trigger");
 }
@@ -35,7 +42,7 @@ export async function saveTrigger(data: SavedTrigger){
 }
 
 export type ListedTriggerWithWebhooks = ListedTrigger & {
-  webhooks:string[];
+  webhooks:(SavedWebhook|null)[];
 }
 
 export async function listTriggers(): Promise<ListedTriggerWithWebhooks[]>{
@@ -48,6 +55,11 @@ export async function listTriggers(): Promise<ListedTriggerWithWebhooks[]>{
     result.push({...trigger, webhooks });
   }
   return result;
+}
+
+export async function getTrigger(triggerId: string):Promise<ListedTrigger|null>{
+  const storage = useTriggerStorage();
+  return await storage.getItem(triggerId);
 }
 
 export function useLinkStorage(){
@@ -75,10 +87,10 @@ export async function addLinkTriggerWebhook(link: LinkTriggerWebhookRequest){
 
 export async function getLinkedWebhooks(triggerId: string){
   const storage = useLinkStorage();
-  return await storage.getItem(`trigger${triggerId}`) ?? [];
+  return await Promise.all((await storage.getItem(`trigger${triggerId}`) ?? []).map((el)=>getWebhook(el)));
 }
 
 export async function getLinkedTriggers(webhookId: string){
   const storage = useLinkStorage();
-  return await storage.getItem(`webhook${webhookId}`) ?? [];
+  return (await Promise.all((await storage.getItem(`webhook${webhookId}`) ?? []).map((el)=>getTrigger(el)))).map((el)=>el && {_id:el._id, name:el.name} );
 }
