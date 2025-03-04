@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import shiba from "~/assets/shiba.png"
+const showDrawer = ref(false);
 </script>
 
 <template>
   <v-layout class="rounded rounded-md background">
-    <v-app-bar><img :src="shiba" class="shiba" alt=""/><v-app-bar-title>Dinner's Ready</v-app-bar-title></v-app-bar>
+    <v-app-bar><v-app-bar-nav-icon @click.stop="showDrawer = !showDrawer"><img :src="shiba" class="shiba" alt=""/></v-app-bar-nav-icon><v-app-bar-title>Dinner's Ready</v-app-bar-title></v-app-bar>
 
-    <v-navigation-drawer>
+    <v-navigation-drawer v-if="showDrawer">
       <v-list nav>
         <v-list-item><NuxtLink to="/">Incoming Sources</NuxtLink></v-list-item>
         <v-list-item><NuxtLink to="/outgoing">Outgoing Sources</NuxtLink></v-list-item>
@@ -28,6 +29,5 @@ import shiba from "~/assets/shiba.png"
 }
 .shiba {
   height: 40px;
-  margin: 10px;
 }
 </style>
