@@ -13,8 +13,10 @@ async function handleAddSubmit(e: SubmitEvent) {
   sourceName.value = triggerResponse.name;
   refreshTriggers();
 }
-async function handleLinkSubmit(triggerId, event) {
-  await $fetch(`/api/link/${triggerId}${event}`)
+async function handleLinkSubmit(triggerId, e: SubmitEvent) {
+  const formData = new FormData(e.target);
+  await $fetch("/api/link", {method: "post", immediate: false, body: { triggerId: triggerId, webhookId: formData.get("webhookId")}})
+  refreshTriggers();
 }
 function copySecret() {
   navigator.clipboard.writeText(secret.value);
@@ -38,14 +40,21 @@ function copySecret() {
   </v-banner>
   <h1>Incoming Sources</h1>
   <ul>
-    <li v-for="source in triggers" class="list-item">
+    <li v-for="source in triggers" class="container">
       <div><h2>{{source.name}}</h2></div>
-      <!-- <ul>
-        <li v-for="link in source.links">{{link.name}}</li>
-      </ul> -->
+      <div>
+        <h3 v-if="source.webhooks.length > 0">Linked Outgoing Sources</h3>
+        <ul>
+          <li v-for="webhook in source.webhooks">
+            <h4>{{webhook.name}}</h4>
+            <p>Callback URL: {{webhook.callback}}</p>
+            <p>Secret: {{webhook.secret}}</p>
+          </li>
+        </ul>
+      </div>
       <v-form @submit.prevent="(e) => handleLinkSubmit(source._id, e)">
         <h3>Link Outgoing Source</h3>
-        <v-select label="Outgoing" :items="webhooks" item-title="name" item-value="name"></v-select>
+        <v-select label="Outgoing" name="webhookId" :items="webhooks" item-title="name" item-value="_id"></v-select>
         <v-btn rounded="lg" variant="elevated" type="submit">Link</v-btn>
       </v-form>
     </li>
@@ -59,12 +68,17 @@ function copySecret() {
 
 <style scoped>
 li {
-  margin: 2em;
+  margin: .5em;
   list-style: none;
 }
 form {
   padding: 1em;
   background-color: #E6EFEF;
+  border-radius: 36px;
+}
+.container {
+  background-color: #F4F4F6;
+  padding: 1em;
   border-radius: 36px;
 }
 </style>
