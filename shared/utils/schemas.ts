@@ -39,3 +39,9 @@ export type SavedTrigger = TypeOf<typeof savedTriggerSchema>;
 export type CreatedTrigger = TypeOf<typeof createdTriggerSchema>;
 
 
+export const linkTriggerWebhookSchema = _z.object({
+  triggerId: _z.string().uuid(),
+  webhookId: _z.string().uuid(),
+});
+
+export type LinkTriggerWebhookRequest = TypeOf<typeof linkTriggerWebhookSchema>;
