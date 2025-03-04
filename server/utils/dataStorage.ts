@@ -57,7 +57,7 @@ export async function listTriggers(): Promise<ListedTriggerWithWebhooks[]>{
   return result;
 }
 
-export async function getTrigger(triggerId: string):Promise<ListedTrigger|null>{
+export async function getTrigger(triggerId: string):Promise<SavedTrigger|null>{
   const storage = useTriggerStorage();
   return await storage.getItem(triggerId);
 }
