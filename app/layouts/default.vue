@@ -3,14 +3,13 @@
 </script>
 
 <template>
-  <v-layout class="rounded rounded-md">
+  <v-layout class="rounded rounded-md background">
     <v-app-bar title="Dinner's Ready"></v-app-bar>
 
     <v-navigation-drawer>
       <v-list nav>
         <v-list-item><NuxtLink to="/">Incoming Sources</NuxtLink></v-list-item>
-        <v-list-item><NuxtLink to="outgoing">Outgoing Sources</NuxtLink></v-list-item>
-        <v-list-item><NuxtLink to="log">Message Log</NuxtLink></v-list-item>
+        <v-list-item><NuxtLink to="/outgoing">Outgoing Sources</NuxtLink></v-list-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -26,5 +25,8 @@
   grid-template-columns: 1fr;
   align-items: center;
   justify-items: center;
+}
+.background {
+  background-color: #F4F4F6;
 }
 </style>

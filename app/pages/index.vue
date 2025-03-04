@@ -1,21 +1,45 @@
 <script setup lang="ts">
-import { type SavedTrigger, type SavedWebhook } from "../../shared/utils/schemas";
-const { data: triggers } = await useFetch<SavedTrigger[]>("https://3623f49c-e155-49ab-bd37-fbe4b64a4b21.mock.pstmn.io/api/trigger");
-const { data: webhooks } = await useFetch<SavedWebhook[]>("https://3623f49c-e155-49ab-bd37-fbe4b64a4b21.mock.pstmn.io/api/webhook");
-async function handleAddSubmit(data) {
-  await useFetch("https://3623f49c-e155-49ab-bd37-fbe4b64a4b21.mock.pstmn.io/api/trigger/add", {method: "post", immediate: false, body: data});
+import { type SavedWebhook } from "../../shared/utils/schemas";
+const { data: triggers, refresh: refreshTriggers } = await useFetch("/api/trigger");
+const { data: webhooks } = await useFetch<SavedWebhook[]>("/api/webhook");
+const secret = ref("");
+const sourceName = ref("");
+const showSecretBanner = ref(false);
+async function handleAddSubmit(e: SubmitEvent) {
+  const formData = new FormData(e.target);
+  const triggerResponse = await $fetch("/api/trigger/add", {method: "post", immediate: false, body: { name: formData.get("name")}});
+  showSecretBanner.value = true;
+  secret.value = triggerResponse.secret;
+  sourceName.value = triggerResponse.name;
+  refreshTriggers();
 }
 async function handleLinkSubmit(triggerId, event) {
-  await useFetch(`https://3623f49c-e155-49ab-bd37-fbe4b64a4b21.mock.pstmn.io/api/link/${triggerId}${event}`)
+  await $fetch(`/api/link/${triggerId}${event}`)
+}
+function copySecret() {
+  navigator.clipboard.writeText(secret.value);
 }
 </script>
 
 <template>
+  <v-banner
+    v-if="showSecretBanner"
+    class="my-4"
+    color="warning"
+    icon="$warning"
+    lines="one">
+    <v-banner-text><p>{{sourceName}} secret: {{secret}}</p></v-banner-text>
+    <template v-slot:actions>
+      <v-btn type="button" @click="copySecret">Copy Secret</v-btn>
+      <v-btn type="button" @click="showSecretBanner = false">
+        Dismiss
+      </v-btn>
+    </template>
+  </v-banner>
   <h1>Incoming Sources</h1>
   <ul>
-    <!--Use data iterator, same on other pages-->
-    <li v-for="source in triggers">
-      <div><h2>{{source.name}}</h2><v-btn>Settings</v-btn></div>
+    <li v-for="source in triggers" class="list-item">
+      <div><h2>{{source.name}}</h2></div>
       <!-- <ul>
         <li v-for="link in source.links">{{link.name}}</li>
       </ul> -->
@@ -28,12 +52,19 @@ async function handleLinkSubmit(triggerId, event) {
   </ul>
   <v-form @submit.prevent="handleAddSubmit">
     <h2>Add Incoming Source</h2>
-    <v-text-field label="Name"></v-text-field>
+    <v-text-field label="Name" name="name"></v-text-field>
     <v-btn rounded="lg" variant="elevated" type="submit">Add</v-btn>
-    <!--trigger copy secret modal on successful add-->
   </v-form>
 </template>
 
 <style scoped>
-
+li {
+  margin: 2em;
+  list-style: none;
+}
+form {
+  padding: 1em;
+  background-color: #E6EFEF;
+  border-radius: 36px;
+}
 </style>
