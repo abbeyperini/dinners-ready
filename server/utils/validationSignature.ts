@@ -1,4 +1,5 @@
 import _C from "node:crypto"
+
 export async function createSignature(secret:string, payload: string):Promise<string>{
   const hmac = _C.createHmac("sha256", secret);
   hmac.update(payload);
