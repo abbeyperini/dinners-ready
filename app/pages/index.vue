@@ -7,7 +7,7 @@ const sourceName = ref("");
 const showSecretBanner = ref(false);
 async function handleAddSubmit(e: SubmitEvent) {
   const formData = new FormData(e.target as HTMLFormElement);
-  const triggerResponse = await $fetch("/api/trigger/add", {method: "post", immediate: false, body: { name: formData.get("name")}});
+  const triggerResponse: CreatedTrigger = await $fetch("/api/trigger/add", {method: "post", immediate: false, body: { name: formData.get("name")}});
   secret.value = triggerResponse.secret;
   sourceName.value = triggerResponse.name;
   showSecretBanner.value = true;
