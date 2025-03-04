@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import { type SavedWebhook } from "../../shared/utils/schemas";
-const { data: triggers, refresh: refreshTriggers } = await useFetch("/api/trigger");
+const { data: triggers, refresh } = await useFetch("/api/trigger");
 const { data: webhooks } = await useFetch<SavedWebhook[]>("/api/webhook");
 const secret = ref("");
 const sourceName = ref("");
 const showSecretBanner = ref(false);
 async function handleAddSubmit(e: SubmitEvent) {
-  const formData = new FormData(e.target);
+  const formData = new FormData(e.target as HTMLFormElement);
   const triggerResponse = await $fetch("/api/trigger/add", {method: "post", immediate: false, body: { name: formData.get("name")}});
-  showSecretBanner.value = true;
   secret.value = triggerResponse.secret;
   sourceName.value = triggerResponse.name;
-  refreshTriggers();
+  showSecretBanner.value = true;
+  refresh();
 }
-async function handleLinkSubmit(triggerId, e: SubmitEvent) {
-  const formData = new FormData(e.target);
+async function handleLinkSubmit(triggerId: string, e: SubmitEvent) {
+  const formData = new FormData(e.target as HTMLFormElement);
   await $fetch("/api/link", {method: "post", immediate: false, body: { triggerId: triggerId, webhookId: formData.get("webhookId")}})
-  refreshTriggers();
+  refresh();
 }
 function copySecret() {
   navigator.clipboard.writeText(secret.value);
@@ -41,14 +41,17 @@ function copySecret() {
   <h1>Incoming Sources</h1>
   <ul>
     <li v-for="source in triggers" class="container">
-      <div><h2>{{source.name}}</h2></div>
+      <div>
+        <h2>{{source.name}}</h2>
+        <p>id: /api/trigger/{{source._id}}</p>
+      </div>
       <div>
         <h3 v-if="source.webhooks.length > 0">Linked Outgoing Sources</h3>
         <ul>
           <li v-for="webhook in source.webhooks">
-            <h4>{{webhook.name}}</h4>
-            <p>Callback URL: {{webhook.callback}}</p>
-            <p>Secret: {{webhook.secret}}</p>
+            <h4>{{webhook?.name}}</h4>
+            <p>Callback URL: {{webhook?.callback}}</p>
+            <p>Secret: {{webhook?.secret}}</p>
           </li>
         </ul>
       </div>

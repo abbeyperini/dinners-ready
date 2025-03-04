@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { type SavedWebhook } from "../../shared/utils/schemas";
-const { data: triggers, refresh: refreshTriggers } = await useFetch("/api/trigger");
-const { data: webhooks, refresh } = await useFetch<SavedWebhook[]>("/api/webhook");
+const { data: triggers } = await useFetch("/api/trigger");
+const { data: webhooks, refresh } = await useFetch("/api/webhook");
 async function handleAddSubmit(e: SubmitEvent) {
-  const formData = new FormData(e.target);
+  const formData = new FormData(e.target as HTMLFormElement);
   await $fetch("/api/webhook/subscribe", {method: "post", immediate: false, body: {
     name: formData.get("name"),
     callback: formData.get("url"),
@@ -12,7 +11,7 @@ async function handleAddSubmit(e: SubmitEvent) {
   refresh();
 }
 async function handleLinkSubmit(webhookId: string, e: SubmitEvent) {
-  const formData = new FormData(e.target);
+  const formData = new FormData(e.target as HTMLFormElement);
   await $fetch("/api/link", {method: "post", immediate: false, body: { triggerId: formData.get("triggerId"), webhookId: webhookId}})
   refresh();
 }
@@ -29,7 +28,10 @@ async function handleLinkSubmit(webhookId: string, e: SubmitEvent) {
       <div>
         <h3 v-if="source.triggers.length > 0">Linked Incoming Sources</h3>
         <ul>
-          <li v-for="trigger in source.triggers">{{trigger.name}}</li>
+          <li v-for="trigger in source.triggers">
+            <h4>{{trigger?.name}}</h4>
+            <p>id: /api/trigger/{{source._id}}</p>
+          </li>
         </ul>
         <v-form @submit.prevent="(e) => handleLinkSubmit(source._id, e)">
           <h3>Link Outgoing Source</h3>
