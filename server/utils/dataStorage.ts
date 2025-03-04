@@ -28,12 +28,13 @@ export async function saveTrigger(data: SavedTrigger){
   return await storage.setItem(data._id, data);
 }
 
-export async function listTriggers(): Promise<SavedTrigger[]>{
+export async function listTriggers(): Promise<ListedTrigger[]>{
   const storage = useTriggerStorage();
   const keys = await storage.getKeys();
-  const result: SavedTrigger[] = [];
+  const result: ListedTrigger[] = [];
   for(let key of keys){
-    result.push((await storage.getItem(key))!);
+    const {hashedSecret, ...trigger} = (await storage.getItem(key))!
+    result.push(trigger);
   }
   return result;
 }

@@ -17,20 +17,24 @@ export type SavedWebhook = TypeOf<typeof savedWebhookSchema>;
 
 export const baseTriggerSchema = _z.object({
   name: _z.string().min(1).max(255),
-
 });
 
-export const savedTriggerSchema = _z.intersection(baseIDSchema, baseTriggerSchema)
+export const listedTriggerSchema = _z.intersection(baseIDSchema, baseTriggerSchema)
+
+export const savedTriggerSchema = listedTriggerSchema
     .and(_z.object({
       hashedSecret: _z.string().max(128),
     }));
 
-export const createdTriggerSchema = _z.intersection(baseIDSchema, baseTriggerSchema)
+export const createdTriggerSchema = listedTriggerSchema
     .and(_z.object({
       secret: _z.string().max(128),
     }));
 
+
+
 export type TriggerRequest = TypeOf<typeof baseTriggerSchema>;
+export type ListedTrigger = TypeOf<typeof listedTriggerSchema>;
 export type SavedTrigger = TypeOf<typeof savedTriggerSchema>;
 export type CreatedTrigger = TypeOf<typeof createdTriggerSchema>;
 
