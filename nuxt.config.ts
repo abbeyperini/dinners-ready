@@ -24,12 +24,5 @@ export default defineNuxtConfig({
       }
     }
   },
-  vuetify:{
-    vuetifyOptions:{
-      theme:{
-        defaultTheme: "light",
-      }
-    }
-  },
   modules: ['vuetify-nuxt-module', '@vueuse/nuxt', '@nuxt/test-utils/module']
 })
