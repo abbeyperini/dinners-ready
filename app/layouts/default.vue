@@ -7,7 +7,7 @@ const showDrawer = ref(false);
   <v-layout class="rounded rounded-md background">
     <v-app-bar><v-app-bar-nav-icon @click.stop="showDrawer = !showDrawer"><img :src="shiba" class="shiba" alt=""/></v-app-bar-nav-icon><v-app-bar-title>Dinner's Ready</v-app-bar-title></v-app-bar>
 
-    <v-navigation-drawer v-if="showDrawer">
+    <v-navigation-drawer v-model="showDrawer">
       <v-list nav>
         <v-list-item><NuxtLink to="/">Incoming Sources</NuxtLink></v-list-item>
         <v-list-item><NuxtLink to="/outgoing">Outgoing Sources</NuxtLink></v-list-item>
