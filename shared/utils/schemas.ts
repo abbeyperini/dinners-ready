@@ -6,7 +6,7 @@ export const baseIDSchema = _z.object({
 
 export const baseWebhookSchema = _z.object({
   name: _z.string().min(1).max(255),
-  callback: _z.string().url().max(255),
+  callback: _z.string().url().max(1024),
   secret: _z.string().max(255),
 })
 
