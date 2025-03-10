@@ -8,7 +8,10 @@ async function CALL_ALL_THE_WEBHOOKS(trigger: SavedTrigger, body: any){
   const webhooks = await getLinkedWebhooks(trigger._id);
   for(let hook of webhooks){
     if(hook){
-      await callWebhook(hook, body);
+      await callWebhook(hook, {
+        _type: "message",
+        payload: body,
+      });
     }
   }
 }

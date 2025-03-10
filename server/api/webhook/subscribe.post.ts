@@ -14,14 +14,12 @@ export default defineEventHandler(async (event )=>{
     return validation.error.flatten();
   }
 
-
-
-  const testPayload = {
-    _type: "test",
-    message:"Test",
-  }
-
-  await callWebhook(body, testPayload);
+  await callWebhook(body, {
+    _type: "ping",
+    payload: {
+      message: "Ping!"
+    }
+  });
 
   const _id = randomUUID();
   await saveWebhook({
